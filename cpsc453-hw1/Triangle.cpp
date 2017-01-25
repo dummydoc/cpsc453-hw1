@@ -3,7 +3,7 @@
 
 #include "Triangle.hpp"
 
-Triangle::Triangle(glm::vec3 vec1, vec2, vec3) : v1(vec1), v2(vec2), v3(vec3) {
+Triangle::Triangle(glm::vec3 vec1, glm::vec3 vec2, glm::vec3 vec3) : v1(vec1), v2(vec2), v3(vec3) {
 }
 
 Triangle::~Triangle(){

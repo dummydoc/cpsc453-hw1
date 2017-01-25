@@ -11,7 +11,7 @@ class Triangle {
 private:
   glm::vec3 v1, v2, v3;
 public:
-  Triangle(glm::vec3 vec1, vec2, vec3);
+  Triangle(glm::vec3 vec1, glm::vec3 vec2, glm::vec3 vec3);
   ~Triangle();
   glm::vec3 getV1();
   glm::vec3 getV2();
