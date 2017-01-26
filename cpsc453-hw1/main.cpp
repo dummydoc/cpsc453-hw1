@@ -36,12 +36,13 @@ Triangle transformTri(Triangle tri, glm::vec3 vertex)
 
 Hexagon transformHexagon(Hexagon hex, glm::vec3 dir)
 {
-  Hexagon transformedHexagon(transformTri(hex.getT1(), dir),
-                             transformTri(hex.getT2(), dir),
-                             transformTri(hex.getT3(), dir),
-                             transformTri(hex.getT4(), dir),
-                             transformTri(hex.getT5(), dir),
-                             transformTri(hex.getT6(), dir));
+  Hexagon transformedHexagon = Hexagon(transformTri(hex.getT1(), dir),
+                                       transformTri(hex.getT2(), dir),
+                                       transformTri(hex.getT3(), dir),
+                                       transformTri(hex.getT4(), dir),
+                                       transformTri(hex.getT5(), dir),
+                                       transformTri(hex.getT6(), dir),
+                                       glm::vec3((2.0/3.0) * dir.x, (2.0/3.0) * dir.y, 1), dir);
 
   return transformedHexagon;
 }
@@ -75,7 +76,9 @@ int main(int argc, const char * argv[]) {
     
     float theta = M_PI/3.0;
     
-    float radius = glm::length(glm::vec3(1.0, 0.0, 1.0) - glm::vec3(0.0, 0.0, 1.0));
+    glm::vec3 center = glm::vec3(0.0, 0.0, 1.0);
+    
+    float radius = glm::length(glm::vec3(1.0, 0.0, 1.0) - center);
     
     for (int i = 1; i < 6; i++) {
         if (i == 3) {
@@ -85,7 +88,25 @@ int main(int argc, const char * argv[]) {
         }
     }
     
+    Triangle tr1 = Triangle(center, vertices.at(0), vertices.at(1));
+    Triangle tr2 = Triangle(center, vertices.at(1), vertices.at(2));
+    Triangle tr3 = Triangle(center, vertices.at(2), vertices.at(3));
+    Triangle tr4 = Triangle(center, vertices.at(3), vertices.at(4));
+    Triangle tr5 = Triangle(center, vertices.at(4), vertices.at(5));
+    Triangle tr6 = Triangle(center, vertices.at(5), vertices.at(0));
+    
+    
+    Hexagon testHex = Hexagon(tr1, tr2, tr3, tr4, tr5, tr6, center, vertices.at(0));
+    
+    Hexagon smallTestHex = transformHexagon(testHex, center);
+    
     for (glm::vec3 v : vertices) {
+        std::cout << v.x << std::endl;
+        std::cout << v.y << std::endl;
+        std::cout << v.z << std::endl;
+    }
+    
+    for (glm::vec3 v : smallTestHex.getVertices()) {
         std::cout << v.x << std::endl;
         std::cout << v.y << std::endl;
         std::cout << v.z << std::endl;

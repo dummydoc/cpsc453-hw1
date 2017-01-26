@@ -5,8 +5,8 @@
 #include "Hexagon.hpp"
 
 Hexagon::Hexagon(Triangle tri1, Triangle tri2, Triangle tri3, Triangle tri4,
-                 Triangle tri5, Triangle tri6) :
-                    t1(tri1), t2(tri2), t3(tri3), t4(tri4), t5(tri5), t6(tri6) {
+                 Triangle tri5, Triangle tri6, glm::vec3 center, glm::vec3 rightVertex) :
+                    t1(tri1), t2(tri2), t3(tri3), t4(tri4), t5(tri5), t6(tri6), c(center), rVertex(rightVertex) {
 }
 
 Hexagon::~Hexagon(){
@@ -53,4 +53,12 @@ std::vector<glm::vec3> Hexagon::getVertices(){
     }
     
     return vertices;
+}
+
+glm::vec3 Hexagon::getCenter() {
+    return this->c;
+}
+
+glm::vec3 Hexagon::getRightVertex(){
+    return this->rVertex;
 }
