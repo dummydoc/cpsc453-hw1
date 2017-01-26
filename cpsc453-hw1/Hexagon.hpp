@@ -13,7 +13,7 @@ private:
   Triangle t1, t2, t3, t4, t5, t6;
 public:
   Hexagon(Triangle tri1, Triangle tri2, Triangle tri3, Triangle tri4,
-    Triangle tri5, Triangle tri6);
+          Triangle tri5, Triangle tri6);
   ~Hexagon();
   Triangle getT1();
   Triangle getT2();
@@ -21,6 +21,7 @@ public:
   Triangle getT4();
   Triangle getT5();
   Triangle getT6();
+    std::vector<glm::vec3> getVertices();
 };
 
 #endif // HEXAGON_HPP
