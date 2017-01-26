@@ -17,6 +17,16 @@
 
 Triangle transformTri(Triangle tri, glm::vec3 vertex)
 {
+    std::cout << "Original" << std::endl;
+    
+    for (glm::vec3 v : tri.getVertices()) {
+        std::cout << v.x << std::endl;
+        std::cout << v.y << std::endl;
+        std::cout << v.z << std::endl;
+    }
+    
+    std::cout << std::endl;
+    
     glm::mat3 scaleMatrix = glm::mat3(1.0/3.0, 0.0, 0.0,
                                       0.0, 1.0/3.0, 0.0,
                                       0.0, 0.0, 1.0);
@@ -28,8 +38,18 @@ Triangle transformTri(Triangle tri, glm::vec3 vertex)
 
     glm::mat3 transformMatrix = scaleMatrix * translateMatrix;
 
-    Triangle transformedTriangle(transformMatrix * tri.getV1(), transformMatrix *
+    Triangle transformedTriangle = Triangle(transformMatrix * tri.getV1(), transformMatrix *
       tri.getV2(), transformMatrix * tri.getV3());
+    
+    std::cout << "Transformed" << std::endl;
+    
+    for (glm::vec3 v : transformedTriangle.getVertices()) {
+        std::cout << v.x << std::endl;
+        std::cout << v.y << std::endl;
+        std::cout << v.z << std::endl;
+    }
+    
+    std::cout << std::endl;
 
     return transformedTriangle;
 }
@@ -100,12 +120,13 @@ int main(int argc, const char * argv[]) {
     
     Hexagon smallTestHex = transformHexagon(testHex, center);
     
-    for (glm::vec3 v : vertices) {
-        std::cout << v.x << std::endl;
-        std::cout << v.y << std::endl;
-        std::cout << v.z << std::endl;
-    }
-    
+//    for (glm::vec3 v : vertices) {
+//        std::cout << v.x << std::endl;
+//        std::cout << v.y << std::endl;
+//        std::cout << v.z << std::endl;
+//    }
+//
+    std::cout << "Transformed hex" << std::endl;
     for (glm::vec3 v : smallTestHex.getVertices()) {
         std::cout << v.x << std::endl;
         std::cout << v.y << std::endl;

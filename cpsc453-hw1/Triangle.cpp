@@ -20,3 +20,15 @@ glm::vec3 Triangle::getV2(){
 glm::vec3 Triangle::getV3(){
   return this->v3;
 }
+
+std::vector<glm::vec3> Triangle::getVertices(){
+    std::vector<glm::vec3> vertices;
+    
+    vertices.push_back(getV1());
+    vertices.push_back(getV2());
+    vertices.push_back(getV3());
+    
+    
+    return vertices;
+}
+

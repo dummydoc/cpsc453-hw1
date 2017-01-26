@@ -4,6 +4,7 @@
 #ifndef TRIANGLE_HPP
 #define TRIANGLE_HPP
 
+#include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -16,6 +17,7 @@ public:
   glm::vec3 getV1();
   glm::vec3 getV2();
   glm::vec3 getV3();
+    std::vector<glm::vec3> getVertices();
 };
 
 #endif // TRIANGLE_HPP
