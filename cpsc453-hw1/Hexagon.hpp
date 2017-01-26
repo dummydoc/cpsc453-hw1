@@ -25,6 +25,7 @@ public:
     std::vector<glm::vec3> getVertices();
     glm::vec3 getCenter();
     glm::vec3 getRightVertex();
+    std::vector<Triangle> getTriangles();
 };
 
 #endif // HEXAGON_HPP

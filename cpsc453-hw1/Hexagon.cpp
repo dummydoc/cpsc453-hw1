@@ -38,17 +38,21 @@ Triangle Hexagon::getT6(){
 
 std::vector<glm::vec3> Hexagon::getVertices(){
     std::vector<glm::vec3> vertices;
-    vertices.push_back(glm::vec3(1.0, 0.0, 1.0));
+    vertices.push_back(this->getRightVertex());
     
     float theta = M_PI/3.0;
     
-    float radius = glm::length(glm::vec3(1.0, 0.0, 1.0) - glm::vec3(0.0, 0.0, 1.0));
+    float radius = glm::length(this->getRightVertex() - this->getCenter());
     
     for (int i = 1; i < 6; i++) {
         if (i == 3) {
-            vertices.push_back(glm::vec3(-1.0, 0.0, 1.0));
+            vertices.push_back(glm::vec3(2 * this->getCenter().x - this->getRightVertex().x,
+                                         2 * this->getCenter().y - this->getRightVertex().y,
+                                         1.0));
         } else {
-            vertices.push_back(glm::vec3(0.0 + radius * cosf(theta * i), 0.0 + radius * sinf(theta * i), 1.0));
+            vertices.push_back(glm::vec3(this->getCenter().x + radius * cosf(theta * i),
+                                         this->getCenter().y + radius * sinf(theta * i),
+                                         1.0));
         }
     }
     
@@ -61,4 +65,17 @@ glm::vec3 Hexagon::getCenter() {
 
 glm::vec3 Hexagon::getRightVertex(){
     return this->rVertex;
+}
+
+std::vector<Triangle> Hexagon::getTriangles(){
+    std::vector<Triangle> triangles;
+    
+    triangles.push_back(this->getT1());
+    triangles.push_back(this->getT2());
+    triangles.push_back(this->getT3());
+    triangles.push_back(this->getT4());
+    triangles.push_back(this->getT5());
+    triangles.push_back(this->getT6());
+    
+    return triangles;
 }
