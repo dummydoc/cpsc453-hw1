@@ -26,6 +26,7 @@ public:
     glm::vec3 getCenter();
     glm::vec3 getRightVertex();
     std::vector<Triangle> getTriangles();
+    static Hexagon transformHex(Hexagon hex, glm::vec3 dir);
 };
 
 #endif // HEXAGON_HPP

@@ -2,6 +2,7 @@
 // Hexagon class with 6 Triangles using Triangle.hpp
 
 #include <vector>
+#include "Triangle.hpp"
 #include "Hexagon.hpp"
 
 Hexagon::Hexagon(Triangle tri1, Triangle tri2, Triangle tri3, Triangle tri4,
@@ -78,4 +79,26 @@ std::vector<Triangle> Hexagon::getTriangles(){
     triangles.push_back(this->getT6());
     
     return triangles;
+}
+
+Hexagon Hexagon::transformHex(Hexagon hex, glm::vec3 dir){
+    Triangle transformedTri1 = Triangle::transformTri(hex.getT1(), dir, hex.getCenter());
+    Triangle transformedTri2 = Triangle::transformTri(hex.getT2(), dir, hex.getCenter());
+    Triangle transformedTri3 = Triangle::transformTri(hex.getT3(), dir, hex.getCenter());
+    Triangle transformedTri4 = Triangle::transformTri(hex.getT4(), dir, hex.getCenter());
+    Triangle transformedTri5 = Triangle::transformTri(hex.getT5(), dir, hex.getCenter());
+    Triangle transformedTri6 = Triangle::transformTri(hex.getT6(), dir, hex.getCenter());
+
+    Hexagon transformedHexagon = Hexagon(transformedTri1,
+                                         transformedTri2,
+                                         transformedTri3,
+                                         transformedTri4,
+                                         transformedTri5,
+                                         transformedTri6,
+                                         glm::vec3((2.0/3.0) * dir.x, (2.0/3.0) * dir.y, 1),
+                                         dir);
+    
+    
+    
+    return transformedHexagon;
 }

@@ -32,3 +32,20 @@ std::vector<glm::vec3> Triangle::getVertices(){
     return vertices;
 }
 
+Triangle Triangle::transformTri(Triangle tri, glm::vec3 vertex, glm::vec3 center){
+    
+    glm::mat3 scaleMatrix = glm::mat3(1.0/3.0, 0.0, 0.0,
+                                      0.0, 1.0/3.0, 0.0,
+                                      0.0, 0.0, 1.0);
+
+    glm::mat3 translateMatrix = glm::mat3(1.0, 0.0, 0.0,
+                                          0.0, 1.0, 0.0,
+                                          (2.0/3.0) * (vertex - center).x, (2.0/3.0) * (vertex - center).y, 1.0);
+
+    glm::mat3 transformMatrix = translateMatrix * scaleMatrix;
+
+    Triangle transformedTriangle = Triangle(transformMatrix * tri.getV1(), transformMatrix *
+                                            tri.getV2(), transformMatrix * tri.getV3());
+
+    return transformedTriangle;
+}

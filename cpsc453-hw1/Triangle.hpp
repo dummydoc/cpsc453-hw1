@@ -18,6 +18,7 @@ public:
   glm::vec3 getV2();
   glm::vec3 getV3();
     std::vector<glm::vec3> getVertices();
+    static Triangle transformTri(Triangle tri, glm::vec3 vertex, glm::vec3 center);
 };
 
 #endif // TRIANGLE_HPP
