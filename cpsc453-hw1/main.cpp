@@ -50,19 +50,29 @@ int main(int argc, const char * argv[]) {
     
     Hexagon smallTestHex = Hexagon::transformHex(testHex, rightVertex);
     
-    for (glm::vec3 v : testHex.getVertices()) {
-        std::cout << v.x << std::endl;
-        std::cout << v.y << std::endl;
-        std::cout << v.z << std::endl;
+//    for (glm::vec3 v : testHex.getVertices()) {
+//        std::cout << v.x << std::endl;
+//        std::cout << v.y << std::endl;
+//        std::cout << v.z << std::endl;
+//    }
+
+    std::cout << "Original hex" << std::endl;
+    for (Triangle t : testHex.getTriangles()) {
+        //std::cout << "Triangle" << std::endl;
+        for (glm::vec3 v : t.getVertices()) {
+            std::cout << v.x << "," << v.y << std::endl;
+            //std::cout << v.y << std::endl;
+            //std::cout << v.z << std::endl;
+        }
     }
 
     std::cout << "Transformed hex" << std::endl;
     for (Triangle t : smallTestHex.getTriangles()) {
-        std::cout << "Triangle" << std::endl;
+        //std::cout << "Triangle" << std::endl;
         for (glm::vec3 v : t.getVertices()) {
-            std::cout << v.x << std::endl;
-            std::cout << v.y << std::endl;
-            std::cout << v.z << std::endl;
+            std::cout << v.x << "," << v.y << "," << std::endl;
+            //std::cout << v.y << std::endl;
+            //std::cout << v.z << std::endl;
         }
     }
 
