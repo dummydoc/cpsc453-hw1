@@ -18,26 +18,6 @@
 int main(int argc, const char * argv[]) {
 
     Hexagon testHex = Hexagon::createBaseHexagon();
-
-    //    glm::vec3 rightVertex = glm::vec3(1.0, 0.0, 1.0);
-    //
-    //    Hexagon smallTestHex = Hexagon::transformHex(testHex, rightVertex);
-
-    //     for (glm::vec3 v : testHex.getVertices()) {
-    //         std::cout << v.x << std::endl;
-    //         std::cout << v.y << std::endl;
-    //         std::cout << v.z << std::endl;
-    //     }
-
-    //std::cout << "Transformed hex" << std::endl;
-    //     for (Triangle t : testHex.getTriangles()) {
-    //         std::cout << "Triangle" << std::endl;
-    //         for (glm::vec3 v : t.getVertices()) {
-    //             std::cout << v.x << std::endl;
-    //             std::cout << v.y << std::endl;
-    //             std::cout << v.z << std::endl;
-    //         }
-    //     }
     
     std::vector<float> vertices = Hexagon::recurse(3, testHex, testHex);
     
