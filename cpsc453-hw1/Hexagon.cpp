@@ -102,3 +102,70 @@ Hexagon Hexagon::transformHex(Hexagon hex, glm::vec3 dir){
     
     return transformedHexagon;
 }
+
+std::vector<float> Hexagon::recurse(int level, Hexagon previousHex, Hexagon mainHex) {
+
+    std::vector<float> resultVertices;
+
+    if (level == 0) {
+        for(Triangle t : previousHex.getTriangles()) {
+            for (glm::vec3 v : t.getVertices()) {
+                resultVertices.push_back(v.x);
+                resultVertices.push_back(v.y);
+            }
+        }
+
+        return resultVertices;
+    } else {
+
+        std::vector<glm::vec3> vertices = mainHex.getVertices();
+        std::vector<Hexagon> hexs;
+
+        for (glm::vec3 v : vertices) {
+            hexs.push_back(Hexagon::transformHex(previousHex, v));
+        }
+
+        hexs.push_back(Hexagon::transformHex(previousHex, mainHex.getCenter()));
+
+        for (Hexagon hex : hexs) {
+            std::vector<float> result = recurse(level - 1, hex, mainHex);
+            resultVertices.reserve(resultVertices.size() + result.size());
+            resultVertices.insert(std::end(resultVertices), std::begin(result), std::end(result));
+        }
+        
+        return resultVertices;
+    }
+}
+
+Hexagon Hexagon::createBaseHexagon() {
+
+    std::vector<glm::vec3> vertices;
+    vertices.push_back(glm::vec3(1.0, 0.0, 1.0));
+
+    float theta = M_PI/3.0;
+
+    glm::vec3 center = glm::vec3(0.0, 0.0, 1.0);
+
+    float radius = glm::length(glm::vec3(1.0, 0.0, 1.0) - center);
+
+    for (int i = 1; i < 6; i++) {
+        if (i == 3) {
+            vertices.push_back(glm::vec3(-1.0, 0.0, 1.0));
+        } else {
+            vertices.push_back(glm::vec3(0.0 + radius * cosf(theta * i), 0.0 + radius * sinf(theta * i), 1.0));
+        }
+    }
+
+    Triangle tr1 = Triangle(center, vertices.at(0), vertices.at(1));
+    Triangle tr2 = Triangle(center, vertices.at(1), vertices.at(2));
+    Triangle tr3 = Triangle(center, vertices.at(2), vertices.at(3));
+    Triangle tr4 = Triangle(center, vertices.at(3), vertices.at(4));
+    Triangle tr5 = Triangle(center, vertices.at(4), vertices.at(5));
+    Triangle tr6 = Triangle(center, vertices.at(5), vertices.at(0));
+
+
+    Hexagon hex = Hexagon(tr1, tr2, tr3, tr4, tr5, tr6, center, vertices.at(0));
+    
+    return hex;
+    
+}

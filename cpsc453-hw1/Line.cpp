@@ -35,6 +35,10 @@ std::vector<Line> Line::transformLine(Line line, glm::vec3 center){
 
     glm::mat3 transformMatrix = scaleMatrix;
 
+    std::vector<Line> retVal;
 
-    return Line(glm::vec3(0,0,1), glm::vec3(0,0,1));
+    retVal.push_back(Line(glm::vec3(0,0,1),glm::vec3(0,0,1)));
+
+
+    return retVal;
 }

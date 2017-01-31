@@ -27,6 +27,8 @@ public:
     glm::vec3 getRightVertex();
     std::vector<Triangle> getTriangles();
     static Hexagon transformHex(Hexagon hex, glm::vec3 dir);
+    static std::vector<float> recurse(int level, Hexagon previousHex, Hexagon mainHex);
+    static Hexagon createBaseHexagon();
 };
 
 #endif // HEXAGON_HPP
