@@ -207,7 +207,9 @@ void render(Program &program, VertexArray &va)
 
 }
 
-VertexArray hexagonGenerate(int level) {
+float level = 0;
+
+VertexArray hexagonGenerate() {
 
   float count = pow(7.0, level) * 18;
   VertexArray va(count);
@@ -216,6 +218,20 @@ VertexArray hexagonGenerate(int level) {
 
 	return va;
 
+}
+
+void increaseLevel() {
+  std::cout << "increase" << std::endl;
+  if (level < 6) {
+    level++;
+  }
+}
+
+void decreaseLevel() {
+  std::cout << "decrease" << std::endl;
+  if (level > 0) {
+    level--;
+  }
 }
 
 int main(int argc, char *argv[])
@@ -229,6 +245,8 @@ int main(int argc, char *argv[])
     cout << "GLFW ERROR " << error << ":" << endl;
     cout << description << endl;
   });
+
+
 
   // Use OpenGL 4.1
 	GLFWwindow *window = 0;
@@ -245,15 +263,25 @@ int main(int argc, char *argv[])
 
 	glfwMakeContextCurrent(window);
 
+	glfwSetKeyCallback(window,
+        [](GLFWwindow* window, int key, int scancode, int action, int mode){
+          if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
+            increaseLevel();
+          } else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
+            decreaseLevel();
+          }
+        });
 
   Program p("vertex.glsl","fragment.glsl");
 
 
-  VertexArray va = hexagonGenerate(3);
+
 
 	// run an event-triggered main loop
 	while (!glfwWindowShouldClose(window))
 	{
+
+    VertexArray va = hexagonGenerate();
     // render
 		render(p,va);
 
@@ -265,6 +293,6 @@ int main(int argc, char *argv[])
 	glfwDestroyWindow(window);
 	glfwTerminate();
 
-	cout << "The End" << endl;
+	cout << "The End" << level << endl;
 	return 0;
 }
