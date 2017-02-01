@@ -45,6 +45,16 @@ std::vector<Line> Line::transformLine(Line line, glm::vec3 center){
                                            (2.0/3.0) * (getV2() - getV1()).y,
                                            1);
 
+    glm::mat translateToOriginV1 = glm::mat3(1.0, 0.0, 0.0,
+                                             0.0, 1.0, 0.0,
+                                             -getV1().x, -getV1().y, 1);
+
+    glm::mat translateToOriginV2 = glm::mat3(1.0, 0.0, 0.0,
+                                             0.0, 1.0, 0.0,
+                                             -getV2().x, -getV2().y, 1);
+
+
+
 
 
 
