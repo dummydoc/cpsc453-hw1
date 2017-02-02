@@ -17,7 +17,7 @@ public:
   glm::vec3 getV1();
   glm::vec3 getV2();
     std::vector<glm::vec3> getVertices();
-    std::vector<Line> transformLine(Line line, glm::vec3 center);
+    std::vector<Line> transformLine(Line line);
 };
 
 #endif // LINE_HPP
