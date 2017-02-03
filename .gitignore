@@ -29,3 +29,6 @@
 *.app
 
 cpsc453-hw1.xcodeproj
+
+**/.DS_Store
+.DS_Store
