@@ -21,6 +21,7 @@
 
 #include "Triangle.hpp"
 #include "Hexagon.hpp"
+#include "Line.hpp"
 
 using std::string;
 using std::vector;
@@ -178,6 +179,24 @@ public:
         glBindVertexArray(0);
     }
 
+    void addBuffer(string name, int index, int components, vector<float> buffer) {
+        GLuint buffer_id;
+        glBindVertexArray(id);
+
+        glGenBuffers(1, &buffer_id);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_id);
+        glBufferData(GL_ARRAY_BUFFER, buffer.size()*sizeof(float), buffer.data(), GL_STATIC_DRAW);
+        buffers[name]=buffer_id;
+        indices[name]=index;
+
+        glVertexAttribPointer(index, components, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(index);
+
+        // unset states
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
     void updateBuffer(string name, vector<float> buffer) {
         glBindBuffer(GL_ARRAY_BUFFER, buffers[name]);
         glBufferData(GL_ARRAY_BUFFER, buffer.size()*sizeof(float), buffer.data(), GL_STATIC_DRAW);
@@ -192,43 +211,130 @@ public:
     }
 };
 
-void render(Program &program, VertexArray &va)
+float level = 0;
+float flakeCount = 0;
+float hexCount = 0;
+
+int displayMode = 0;
+
+void render(Program &program, VertexArray &va1, GLenum mode1, VertexArray &va2, GLenum mode2)
 {
-    // clear screen to a dark grey colour
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    // clear screen to a white colour
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(program.id);
-    glBindVertexArray(va.id);
-    glDrawArrays(GL_TRIANGLES, 0, va.count);
+
+    GLint colorLoc = glGetUniformLocation(program.id, "color");
+
+    //float hexColour[4] = {0.02745098039f, 0.7254901961f, 1.0f, 1.0f};
+    float hexColour[4] = {0.8f, 0.8f, 0.8f, 1.0f};
+
+    glBindVertexArray(va1.id);
+
+    glProgramUniform4fv(program.id, colorLoc, 1, hexColour);
+
+    glDrawArrays(mode1, 0, va1.count);
 
     glBindVertexArray(0);
+
+    //float flakeColour[4] = {1.0f, 0.3019607843f, 0.02745098039f, 1.0f};
+    float flakeColour[4] = {0.1f, 0.1f, 0.1f, 1.0f};
+
+    glBindVertexArray(va2.id);
+
+    glProgramUniform4fv(program.id, colorLoc, 1, flakeColour);
+
+    glLineWidth(5.0f);
+
+    glDrawArrays(mode2, 0, va2.count);
+
+    glBindVertexArray(0);
+
     glUseProgram(0);
 
 }
 
-float level = 0;
+void render(Program &program, VertexArray &va, GLenum mode)
+{
+    // clear screen to a dark grey colour
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glUseProgram(program.id);
+    glBindVertexArray(va.id);
+
+    GLint colorLoc = glGetUniformLocation(program.id, "color");
+
+    if (mode == GL_LINE_LOOP) {
+        float flakeColour[4] = {0.1f, 0.1f, 0.1f, 1.0f};
+        glProgramUniform4fv(program.id, colorLoc, 1, flakeColour);
+    } else if (mode == GL_TRIANGLES) {
+        float hexColour[4] = {0.8f, 0.8f, 0.8f, 1.0f};
+        glProgramUniform4fv(program.id, colorLoc, 1, hexColour);
+    }
+
+    glDrawArrays(mode, 0, va.count);
+
+    glBindVertexArray(0);
+    glUseProgram(0);
+    
+}
 
 VertexArray hexagonGenerate() {
 
-    float count = pow(7.0, level) * 18;
-    VertexArray va(count);
-    va.addBuffer("v", 0, Hexagon::recurse(level,
+    hexCount = powf(7.0, level) * 18;
+    VertexArray va(hexCount);
+    va.addBuffer("hexPos", 0, Hexagon::recurse(level,
                                           Hexagon::createBaseHexagon(), Hexagon::createBaseHexagon()));
+
+    std::vector<float> hexColour = {1.0f, 1.0f, 1.0f, 1.0f};
+
+    return va;
+
+}
+
+VertexArray flakeGenerate() {
+
+    flakeCount = powf(4.0, level) * 6;
+    VertexArray va(flakeCount);
+    va.addBuffer("flakePos", 0, Line::recurse(level, Line::createAllHexLines()));
+
+    std::vector<float> flakeColour = {1.0f, 0.0f, 0.0f, 1.0f};
+
+    return va;
+
+}
+
+VertexArray hexFlakeGenerate() {
+
+    hexCount = powf(7.0, level) * 18;
+    flakeCount = powf(4.0, level) * 6;
+    VertexArray va(hexCount + flakeCount);
+    std::vector<float> hexBuffer = Hexagon::recurse(level,
+                                                    Hexagon::createBaseHexagon(),
+                                                    Hexagon::createBaseHexagon());
+
+    std::vector<float> flakeBuffer = Line::recurse(level,
+                                                   Line::createAllHexLines());
+
+
+    va.addBuffer("hex", 0, 2, hexBuffer);
+    va.addBuffer("flake", 1, 2, flakeBuffer);
 
     return va;
 
 }
 
 void increaseLevel() {
-    std::cout << "increase" << std::endl;
-    if (level < 6) {
+    //std::cout << "increase" << std::endl;
+    if (level < 5) {
         level++;
     }
 }
 
 void decreaseLevel() {
-    std::cout << "decrease" << std::endl;
+    //std::cout << "decrease" << std::endl;
     if (level > 0) {
         level--;
     }
@@ -262,6 +368,8 @@ int main(int argc, char *argv[])
     }
     
     glfwMakeContextCurrent(window);
+
+    glfwSetWindowAspectRatio(window, 1, 1);
     
     glfwSetKeyCallback(window,
                        [](GLFWwindow* window, int key, int scancode, int action, int mode){
@@ -269,8 +377,17 @@ int main(int argc, char *argv[])
                                increaseLevel();
                            } else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
                                decreaseLevel();
+                           } else if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+                               displayMode = abs((displayMode - 1) % 3);
+                           } else if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+                               displayMode = (displayMode + 1) % 3;
                            }
                        });
+
+    glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
+    {
+        glViewport(0, 0, width, height);
+    });
     
     Program p("vertex.glsl","fragment.glsl");
     
@@ -281,9 +398,18 @@ int main(int argc, char *argv[])
     while (!glfwWindowShouldClose(window))
     {
         
-        VertexArray va = hexagonGenerate();
+        VertexArray hexVertex = hexagonGenerate();
+        VertexArray flakeVertex = flakeGenerate();
         // render
-        render(p,va);
+        if (displayMode == 0) {
+            render(p, hexVertex, GL_TRIANGLES);
+        } else if (displayMode == 1) {
+            render(p, flakeVertex, GL_LINE_LOOP);
+        } else if (displayMode == 2){
+            render(p, hexVertex, GL_TRIANGLES, flakeVertex, GL_LINE_LOOP);
+        }
+        //render(p, hexVertex, GL_TRIANGLES, flakeVertex, GL_LINE_LOOP);
+        //render(p, flakeVertex, GL_LINE_LOOP);
         
         glfwSwapBuffers(window);
         
@@ -293,6 +419,6 @@ int main(int argc, char *argv[])
     glfwDestroyWindow(window);
     glfwTerminate();
     
-    cout << "The End" << level << endl;
+    cout << "The End" << endl;
     return 0;
 }

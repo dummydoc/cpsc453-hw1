@@ -17,7 +17,9 @@ public:
   glm::vec3 getV1();
   glm::vec3 getV2();
     std::vector<glm::vec3> getVertices();
-    std::vector<Line> transformLine(Line line);
+    static std::vector<Line> transformLine(Line line);
+    static std::vector<Line> createAllHexLines();
+    static std::vector<float> recurse(int level, std::vector<Line> lines);
 };
 
 #endif // LINE_HPP
