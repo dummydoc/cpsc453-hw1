@@ -228,7 +228,7 @@ void render(Program &program, VertexArray &va1, GLenum mode1, VertexArray &va2, 
     GLint colorLoc = glGetUniformLocation(program.id, "color");
 
     //float hexColour[4] = {0.02745098039f, 0.7254901961f, 1.0f, 1.0f};
-    float hexColour[4] = {0.8f, 0.8f, 0.8f, 1.0f};
+    float hexColour[4] = {0.5f, 0.5f, 0.5f, 1.0f};
 
     glBindVertexArray(va1.id);
 
@@ -270,7 +270,7 @@ void render(Program &program, VertexArray &va, GLenum mode)
         float flakeColour[4] = {0.1f, 0.1f, 0.1f, 1.0f};
         glProgramUniform4fv(program.id, colorLoc, 1, flakeColour);
     } else if (mode == GL_TRIANGLES) {
-        float hexColour[4] = {0.8f, 0.8f, 0.8f, 1.0f};
+        float hexColour[4] = {0.5f, 0.5f, 0.5f, 1.0f};
         glProgramUniform4fv(program.id, colorLoc, 1, hexColour);
     }
 
@@ -278,7 +278,7 @@ void render(Program &program, VertexArray &va, GLenum mode)
 
     glBindVertexArray(0);
     glUseProgram(0);
-    
+
 }
 
 VertexArray hexagonGenerate() {
@@ -328,7 +328,7 @@ VertexArray hexFlakeGenerate() {
 
 void increaseLevel() {
     //std::cout << "increase" << std::endl;
-    if (level < 5) {
+    if (level < 6) {
         level++;
     }
 }
@@ -366,11 +366,11 @@ int main(int argc, char *argv[])
         glfwTerminate();
         return -1;
     }
-    
+
     glfwMakeContextCurrent(window);
 
     glfwSetWindowAspectRatio(window, 1, 1);
-    
+
     glfwSetKeyCallback(window,
                        [](GLFWwindow* window, int key, int scancode, int action, int mode){
                            if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
@@ -388,16 +388,16 @@ int main(int argc, char *argv[])
     {
         glViewport(0, 0, width, height);
     });
-    
+
     Program p("vertex.glsl","fragment.glsl");
-    
-    
-    
-    
+
+
+
+
     // run an event-triggered main loop
     while (!glfwWindowShouldClose(window))
     {
-        
+
         VertexArray hexVertex = hexagonGenerate();
         VertexArray flakeVertex = flakeGenerate();
         // render
@@ -410,15 +410,15 @@ int main(int argc, char *argv[])
         }
         //render(p, hexVertex, GL_TRIANGLES, flakeVertex, GL_LINE_LOOP);
         //render(p, flakeVertex, GL_LINE_LOOP);
-        
+
         glfwSwapBuffers(window);
-        
+
         glfwPollEvents();
     }
-    
+
     glfwDestroyWindow(window);
     glfwTerminate();
-    
+
     cout << "The End" << endl;
     return 0;
 }
