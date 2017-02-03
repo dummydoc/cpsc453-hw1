@@ -1,0 +1,11 @@
+test: Triangle.o boilerplate.o Hexagon.o
+	g++ -std=c++14 -o test Triangle.o boilerplate.o Hexagon.o `pkg-config --static --libs glfw3 gl`
+boilerplate.o: boilerplate.cpp
+	g++ -std=c++14 -c boilerplate.cpp `pkg-config --static --libs glfw3 gl`
+Triangle.o: Triangle.cpp Triangle.hpp
+	g++ -std=c++14 -c Triangle.cpp `pkg-config --static --libs glfw3 gl`
+
+Hexagon.o: Hexagon.cpp Hexagon.hpp
+	g++ -std=c++14 -c Hexagon.cpp `pkg-config --static --libs glfw3 gl`
+clean:
+	rm test boilerplate.o Triangle.o Hexagon.o
